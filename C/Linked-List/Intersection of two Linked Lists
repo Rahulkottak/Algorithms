@@ -1,0 +1,108 @@
+// C program to get intersection point of two linked list
+#include <stdio.h>
+#include <stdlib.h>
+
+/* Linked list node */
+typedef struct Node {
+	int data;
+	struct Node* next;
+} Node;
+
+//For printing the elements in Linked List
+void display(struct Node* p)
+{
+do
+{
+    printf("%d ",p->data);//for printing p's data
+    p=p->next;//for moving p ahead
+
+}while(p!=NULL);
+}
+
+//Finding intersection
+int getLength(struct Node* head){
+    int cnt=0;
+    while(head){
+        head=head->next ;
+        cnt++ ;
+    }
+    return cnt ;
+}
+
+
+/*Approach 
+1. Find the length of both the linked lists.
+2. Traverse the bigger linked list until length of bigger LinkedList is bigger than smaller one .
+3, Traverse both the heads together and when the head of both the Linked Lists collide then its the intersections point.
+*/
+
+int intersectionPoint(struct Node *headA, struct Node *headB) {
+    if(!headA || !headB) return 0 ;
+
+    int len1=getLength(headA),len2=getLength(headB);
+
+    if(len1>len2){
+        while(len1>len2){
+            headA=headA->next ;
+            len1-- ;
+        }
+    }
+    else if(len1<len2){
+        while(len1<len2){
+            headB=headB->next ;
+            len2-- ;
+        }
+    }
+
+    while(headA && headB){
+        if(headA==headB) return headA->data;
+        headA=headA->next ;
+        headB=headB->next ;
+    }
+    return 0 ;
+}
+
+// Driver Code
+int main()
+{
+	/*
+		Create two linked lists
+
+		1st 3->6->9->15->30
+		2nd 10->15->30
+
+		15 is the intersection point
+	*/
+
+	Node* newNode;
+
+	// Addition of new nodes
+	Node* head1 = (Node*)malloc(sizeof(Node));
+	head1->data = 10;
+
+	Node* head2 = (Node*)malloc(sizeof(Node));
+	head2->data = 3;
+
+	newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = 6;
+	head2->next = newNode;
+
+	newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = 9;
+	head2->next->next = newNode;
+
+	newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = 15;
+	head1->next = newNode;
+	head2->next->next->next = newNode;
+
+	newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = 30;
+	head1->next->next = newNode;
+
+	head1->next->next->next = NULL;
+
+    int c = intersectionPoint(head1,head2);
+    printf("%d", c) ;
+
+}
