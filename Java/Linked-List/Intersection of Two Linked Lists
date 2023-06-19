@@ -1,0 +1,84 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node next;
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
+
+class LinkedListIntersect {
+    public static void main(String[] args) {
+        // list 1
+        Node n1 = new Node(1);
+        n1.next = new Node(2);
+        n1.next.next = new Node(3);
+        n1.next.next.next = new Node(4);
+        n1.next.next.next.next = new Node(5);
+        n1.next.next.next.next.next = new Node(6);
+        n1.next.next.next.next.next.next = new Node(7);
+        // list 2
+        Node n2 = new Node(10);
+        n2.next = new Node(9);
+        n2.next.next = new Node(8);
+        n2.next.next.next = n1.next.next.next;
+        Print(n1);
+        Print(n2);
+        System.out.println(MegeNode(n1, n2).data);
+    }
+
+    // function to print the list
+    public static void Print(Node n) {
+        Node cur = n;
+        while (cur != null) {
+            System.out.print(cur.data + " ");
+            cur = cur.next;
+        }
+        System.out.println();
+    }
+
+    // function to find the intersection of two node
+	
+	/*Approach 
+	1. Find the length of both the linked lists.
+	2. Traverse the bigger linked list until length of bigger LinkedList is bigger than smaller one and also decrease the length of bigger one .
+	3, Traverse both the heads together and when the head of both the Linked Lists collide then its the intersections point.
+	*/
+
+    public static Node MegeNode(Node headA, Node headB) {
+        if (headA == null || headB == null) return null;
+
+        int len1 = getLength(headA);
+        int len2 = getLength(headB);
+
+        if (len1 > len2) {
+            while (len1 > len2) {
+                headA = headA.next;
+                len1--;
+            }
+        } else if (len1 < len2) {
+            while (len1 < len2) {
+                headB = headB.next;
+                len2--;
+            }
+        }
+
+        while (headA != null && headB != null) {
+            if (headA == headB) return headA;
+            headA = headA.next;
+            headB = headB.next;
+        }
+        return null;
+    }
+
+    public static int getLength(Node head) {
+        int cnt = 0;
+        while (head != null) {
+            head = head.next;
+            cnt++;
+        }
+        return cnt;
+    }
+}
